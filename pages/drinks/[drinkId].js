@@ -1,9 +1,13 @@
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 
-function DrinkRecipe({ drink }) {
+function DrinkRecipe() {
+
     const router = useRouter()
-    const drinkId = router.query.drinkId
+    console.log(router.query)
+
+    const drinkInfo = router.query
+    // const drinkId = router.query.drinkId
 
     if (router.isFallback) {
       return <h1>Loading...</h1>
@@ -14,44 +18,44 @@ function DrinkRecipe({ drink }) {
         <Link href='/drinks'>
           <a>Thirsty</a>
         </Link>
-        <h1>Recipe details for drink ID: {drinkId}</h1>
+        <h1>Recipe details for drink ID: {drinkInfo.strCategory}</h1>
       </>
     )
   }
   
   export default DrinkRecipe
 
-  export async function getStaticPaths() {
+  // export async function getStaticPaths() {
 
-    const res = await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=margarita')
-    const data = await res.json()
+  //   // const res = await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=margarita')
+  //   // const data = await res.json()
 
-    console.log('data in paths: ', data)
+  //   // console.log('data in paths: ', data)
 
-    const paths = data ? data.drinks.map(drink => {
-      return {
-        params: {
-          drinkId: `${drink.strDrink}`
-        }
-      }
-    }) : []
+  //   // const paths = data ? data.drinks.map(drink => {
+  //   //   return {
+  //   //     params: {
+  //   //       drinkId: `${drink.strDrink}`
+  //   //     }
+  //   //   }
+  //   // }) : []
   
-    return {
-      paths,
-      fallback: true,
-    }
-  }
+  //   return {
+  //     paths: [],
+  //     fallback: true,
+  //   }
+  // }
 
-  export async function getStaticProps(context) {
-    const { params } = context
-    const res = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${params.strDrink}`)
+  // export async function getServerSideProps(context) {
+  //   const { params } = context
+  //   const res = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${params.strDrink}`)
 
-    const data = await res.json()
-    console.log('data in paths: ', data)
+  //   const data = await res.json()
+  //   console.log('data in paths: ', data)
 
-    return {
-      props: {
-        drink: data.drinks
-      }
-    }
-  }
+  //   return {
+  //     props: {
+  //       drink: data.drinks
+  //     }
+  //   }
+  // }

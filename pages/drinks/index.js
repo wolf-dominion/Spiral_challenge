@@ -20,7 +20,7 @@ export default function Example() {
 
   useEffect(() => {
     const makeTheDrink = () => {
-      console.log('drink', drink, 'drinkquery', drinkQuery)
+      // console.log('drink', drink, 'drinkquery', drinkQuery)
       setDrink(drinkQuery);
     }
 
@@ -34,12 +34,18 @@ export default function Example() {
       { error && <div>failed to load</div> }
       {/* {!data && <div>loading...</div> } */}
       <br></br>
-      { data && <pre>{JSON.stringify(data, null, 2)}</pre>}
+      {/* { data && <pre>{JSON.stringify(data, null, 2)}</pre>} */}
       { data && data.drinks && 
           data.drinks.map(drink => {
             return (
               <div key={drink.strDrink}>
-                <Link href={`drinks/${drink.strDrink}`} passHref>
+                <Link 
+                  href={{
+                    pathname: `drinks/${drink.strDrink}`,
+                    query: drink
+                  }} 
+                  passHref
+                >
                   <h2>{drink.strDrink}</h2>
                 </Link>
               </div>
