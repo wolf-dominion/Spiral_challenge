@@ -1,16 +1,14 @@
 import { useState, useEffect } from "react";
 import useSWR from "swr";
+import Link from 'next/link'
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
 
 export default function Example() {
-  // Set "sleeping" to true.
-  const [sleeping, setSleeping] = useState(true);
   const [drinkQuery, setdrinkQuery] = useState('')
   const [drink, setDrink] = useState('')
-  // const drink = 'margarita'
 
-  // Do not fetch until sleeping is false.
+  // Do not fetch until drink value changes.
   const { data, error } = useSWR(
     drink ? `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${drink}` : null,
     fetcher
@@ -20,7 +18,6 @@ export default function Example() {
     setdrinkQuery(e.target.value);
   };
 
-  // After 3 seconds, setSleeping to false.
   useEffect(() => {
     const makeTheDrink = () => {
       console.log('drink', drink, 'drinkquery', drinkQuery)
@@ -35,9 +32,20 @@ export default function Example() {
     <>
       <input onChange={handleChange} value={drinkQuery} placeholder='Find a drink'/>
       { error && <div>failed to load</div> }
-      {!data && <div>loading in 3 seconds...</div> }
+      {/* {!data && <div>loading...</div> } */}
       <br></br>
       { data && <pre>{JSON.stringify(data, null, 2)}</pre>}
+      { data && data.drinks && 
+          data.drinks.map(drink => {
+            return (
+              <div key={drink.strDrink}>
+                <Link href={`drinks/${drink.strDrink}`} passHref>
+                  <h2>{drink.strDrink}</h2>
+                </Link>
+              </div>
+            )
+        })
+      }
     </>
   )
 }
