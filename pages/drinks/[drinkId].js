@@ -1,5 +1,7 @@
 import { useRouter } from 'next/router'
 import Link from 'next/link'
+import Image from 'next/image'
+import Recipe from '../../components/Recipe'
 
 function DrinkRecipe() {
 
@@ -7,7 +9,6 @@ function DrinkRecipe() {
     console.log(router.query)
 
     const drinkInfo = router.query
-    // const drinkId = router.query.drinkId
 
     if (router.isFallback) {
       return <h1>Loading...</h1>
@@ -18,7 +19,7 @@ function DrinkRecipe() {
         <Link href='/drinks'>
           <a>Thirsty</a>
         </Link>
-        <h1>Recipe details for drink ID: {drinkInfo.strCategory}</h1>
+        <Recipe drinkInfo={drinkInfo}/>
       </>
     )
   }

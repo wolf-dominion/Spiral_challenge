@@ -42,6 +42,7 @@ export default function Example() {
                 <Link 
                   href={{
                     pathname: `drinks/${drink.strDrink}`,
+                    as: `drinks/${drink.strDrink}`,
                     query: drink
                   }} 
                   passHref
