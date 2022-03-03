@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import useSWR from "swr";
 import Link from 'next/link'
+import styles from '../../styles/drinks.module.css'
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
 
@@ -29,37 +30,41 @@ export default function Example() {
   }, [drinkQuery, drink]);
 
   return (
-    <>
-      <input onChange={handleChange} value={drinkQuery} placeholder='Find a drink'/>
+    <div className={styles.gridContainer}>
+      <div className={styles.title} >Thirsty</div>
+      <input className={styles.searchbar} onChange={handleChange} value={drinkQuery} placeholder='Find a drink'/>
       { error && <div>failed to load</div> }
       {/* {!data && <div>loading...</div> } */}
-      <br></br>
       {/* { data && <pre>{JSON.stringify(data, null, 2)}</pre>} */}
-      { data && data.drinks && 
-          data.drinks.map(drink => {
-            return (
-              <div key={drink.strDrink}>
-                <Link 
-                  href={{
-                    pathname: `drinks/${drink.strDrink}`,
-                    as: `drinks/${drink.strDrink}`,
-                    query: drink
-                  }} 
-                  passHref
-                >
-                  <h2>{drink.strDrink}</h2>
-                </Link>
-              </div>
-            )
-        })
-      }
-    </>
+      <div className="resultsGrid">
+        { data && data.drinks && 
+            data.drinks.map(drink => {
+              return (
+                <div className={styles.gridItem} key={drink.strDrink}>
+                  <img className={styles.thumbnail} src={drink.strDrinkThumb} width='30' height='30' alt='drink'/>
+                  <div className={styles.drinkname}><Link
+                    href={{
+                      pathname: `drinks/${drink.strDrink}`,
+                      query: drink
+                    }} 
+                    passHref
+                  >
+                    <span>{drink.strDrink}</span>
+                  </Link>
+                  </div>
+                </div>
+              )
+          })
+        }
+      </div>
+    </div>
   )
 }
 
 // import Link from 'next/link'
 // import { useState } from 'react'
 // import useSWR from 'swr'
+// import { styles } from 'recipe.module.css';
 
 //   const fetcher = async (drink) => {
 //     const res = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${drink}`)
