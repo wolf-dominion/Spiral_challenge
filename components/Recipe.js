@@ -17,7 +17,8 @@ const Recipe = (props) => {
           resultObj.push(ingredientInfo);
         }
       })
-      measurementConverter(resultObj)
+      const chartData = measurementConverter(resultObj)
+      console.log('chart data: ', chartData)
       return resultObj
     }
 
