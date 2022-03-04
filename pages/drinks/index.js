@@ -53,7 +53,7 @@ export default function Example() {
 
   return (
     <div className={styles.gridContainer}>
-      <div className={styles.title} >Thirsty</div>
+      <div className={styles.title}>Thirsty</div>
       {/* <input type='search' className={styles.searchbar} onChange={handleChange} value={drinkQuery} placeholder='Find a drink'/> */}
       
       

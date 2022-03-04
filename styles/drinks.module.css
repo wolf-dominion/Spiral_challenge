@@ -50,3 +50,37 @@
 .divider {
     border-bottom: 1px solid #f7f7f7;
 }
+
+.recipeHeader {
+    background-color: #f7f7f7;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 1fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    height: 60px;
+    padding-bottom: 10px;
+}
+
+.recipeTitle {
+    font-size: 17px;
+    font-weight: 500;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.returnContainer {
+    display: flex;
+    align-items: flex-end;
+    margin-right: auto;
+}
+
+.returnText {
+    color: #83bce2;
+}
+
+.returnArrow {
+    margin-bottom: -6px;
+    padding-left: 10px;
+}
