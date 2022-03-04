@@ -46,7 +46,7 @@ const measurementConverter = (recipe) => {
     }
     
     //console.log('parsed: ',parsedIngs)
-    return ['1', '2']
+    return ['1', '2', '3']
 }
 
 export default measurementConverter
