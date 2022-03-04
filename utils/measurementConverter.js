@@ -1,5 +1,7 @@
-const measurementConverter = (recipe) => {
+import parseIngredient from 'parse-ingredient';
 
+
+const measurementConverter = (recipe) => {
     console.log('recipe: ', recipe)
 
     const tracker = {
@@ -61,7 +63,10 @@ const measurementConverter = (recipe) => {
     // and which ones will not be sent to chart
 
     const interpretStrings = () => {
-        
+
+        tracker.strings.map(ms => {
+            console.log('ms: ', ms, parseIngredient(ms));
+        })
     }
 
     if (tracker.strings.length > 0) {
