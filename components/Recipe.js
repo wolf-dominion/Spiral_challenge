@@ -2,6 +2,11 @@ import styles from './recipe.module.css'
 import measurementConverter from '../utils/measurementConverter';
 import getIngredients from '../utils/getIngredients';
 
+import 'chart.js/auto';
+import { Pie } from 'react-chartjs-2';
+
+const colorPicker = ["#FAF8F0", "#A7E9E1", "#FBC7C3", "#F7F4E7", "#B6DF82"];
+
 const Recipe = (props) => {
 
     const { drinkInfo } = props
@@ -35,8 +40,30 @@ const Recipe = (props) => {
           <div className={styles.ingredientList}>
             {displayIngredients()}
           </div>
-        <div>
-              <div className={styles.chart}></div>
+        <div className={styles.chart}>
+            <Pie
+              width={120}
+              height={120}
+              options={
+                {
+                  plugins: {
+                    legend: {display: false}
+                  }
+                }
+              }
+          data={{
+            labels: false,
+            datasets: [
+              {
+                data: [5, 10, 15, 50, 60],
+                label: '',
+                borderColor: 'rgba(255, 255, 255, 0)',
+                backgroundColor: colorPicker.map(() => colorPicker[Math.round(Math.random() * 7)]),
+                fill: true,
+              },
+            ],
+          }}
+        /> 
             </div>
       </div>
       <div className={styles.instructions}>{drinkInfo.strInstructions}</div>

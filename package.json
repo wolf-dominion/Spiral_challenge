@@ -16,6 +16,7 @@
     "next": "12.1.0",
     "parse-ingredient": "^0.4.0",
     "react": "17.0.2",
+    "react-chartjs-2": "^4.0.1",
     "react-dom": "17.0.2",
     "swr": "^1.2.2"
   },
