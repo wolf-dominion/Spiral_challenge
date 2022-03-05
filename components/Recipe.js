@@ -55,7 +55,7 @@ const Recipe = (props) => {
             labels: false,
             datasets: [
               {
-                data: [5, 10, 15, 50, 60],
+                data: chartData,
                 label: '',
                 borderColor: 'rgba(255, 255, 255, 0)',
                 backgroundColor: colorPicker.map(() => colorPicker[Math.round(Math.random() * 7)]),

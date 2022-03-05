@@ -2,12 +2,13 @@ import parseIngredient from 'parse-ingredient';
 
 
 const measurementConverter = (recipe) => {
-    console.log('recipe: ', recipe)
+    // console.log('recipe: ', recipe)
 
     const tracker = {
         empty: 0,
         number: 0,
-        strings: false
+        isStrings: false,
+        strings: []
     }
 
     const parsedIngs = []
@@ -25,12 +26,48 @@ const measurementConverter = (recipe) => {
         if (!isNaN(measurement) && !isNaN(parseFloat(measurement))) {
             tracker.number = tracker.number + 1
         }
-        else tracker.strings = true
+        else (
+            tracker.strings.push(parsedIng[0])
+        )
 
     });
-
+    let chartData;
     const prepareDataForChart = () => {
-        console.log('prepare data')
+        console.log('strings: ', tracker.strings)
+        const ings = tracker.strings
+
+        const hashTable = {
+            string: '',
+            areStringsSame: true
+        }
+        
+        ings.forEach(i => {
+
+            if (i.unitOfMeasure) {
+                if (hashTable.string && i.unitOfMeasure !== hashTable.string) {
+                    hashTable.areStringsSame = false
+                    return
+                }
+                else hashTable.string = i.unitOfMeasure
+            }
+
+            if (!i.unitOfMeasure && i.description) {
+
+            }
+
+            if (i.quantity && !i.quantity2) {
+
+            }
+
+            if (i.quantity && i.quantity2) {
+
+            }
+
+        })
+
+        if (hashTable.areStringsSame) {
+            chartData = tracker.strings.map(i => i.quantity)
+        }
     }
     
     if (tracker.empty === recipe.length) {
@@ -45,8 +82,8 @@ const measurementConverter = (recipe) => {
         prepareDataForChart()
     }
     
-    //console.log('parsed: ',parsedIngs)
-    return ['1', '2', '3']
+    console.log('final chart data: ',chartData)
+    return chartData
 }
 
 export default measurementConverter
