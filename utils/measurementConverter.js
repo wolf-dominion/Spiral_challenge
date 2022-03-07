@@ -4,12 +4,6 @@ import parseIngredient from 'parse-ingredient';
 const measurementConverter = (recipe) => {
     let chartData;
     let filtered = [];
-    const tracker = {
-        empty: 0,
-        number: 0,
-        isStrings: false,
-        strings: []
-    }
 
     function convertUnitToFO(item) {
         const { unitOfMeasure, quantity } = item
@@ -95,12 +89,12 @@ const measurementConverter = (recipe) => {
         parsedIngs.push(parsedIng)
     });
 
-    console.log('parsed ins: ', parsedIngs)
+    // console.log('parsed ins: ', parsedIngs)
 
     const hashTable = {
         string: '',
         areStringsSame: true,
-        allQuantitiesNull: false
+        allQuantitiesNull: false,
     }
 
     parsedIngs.forEach(ing => {
@@ -125,7 +119,7 @@ const measurementConverter = (recipe) => {
         return validUnits.includes(unit ? unit.toLowerCase() : unit)
     }
 
-    console.log('hashtable: ', hashTable, 'chartdata!!!!!!!!: ', parsedIngs)
+    // console.log('hashtable: ', hashTable, 'chartdata!!!!!!!!: ', parsedIngs)
     if (hashTable.areStringsSame) {
         chartData = parsedIngs.map(i => { 
             const chartInfo = {
@@ -169,7 +163,7 @@ const measurementConverter = (recipe) => {
 
     }
 
-    console.log('chartdata: ', chartData);
+    // console.log('chartdata: ', chartData);
     
     return chartData || null
 }

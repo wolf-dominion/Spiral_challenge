@@ -6,6 +6,7 @@ export function ThirstyProvider({ children }) {
 
   const [drinkQuery, setDrinkQuery] = useState('')
   const [drink, setDrink] = useState('')
+  const [clickedResult, setClickedResult] = useState([])
 
   return (
     <ThirstyContext.Provider
@@ -14,6 +15,8 @@ export function ThirstyProvider({ children }) {
         setDrinkQuery,
         drink,
         setDrink,
+        clickedResult,
+        setClickedResult,
       }}
     >
       {children}

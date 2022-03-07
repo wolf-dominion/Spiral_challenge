@@ -12,6 +12,8 @@ const Recipe = (props) => {
   const ingredients = getIngredients(drinkInfo)
   const chartData = measurementConverter(ingredients)
 
+  // console.log(drinkInfo)
+
     const displayIngredients = () => {
       const list = ingredients.map(ingredient => {
         return (
@@ -52,10 +54,10 @@ const Recipe = (props) => {
             labels: false,
             datasets: [
               {
-                data: chartData.map(i => i.quantity),
+                data: chartData && chartData.map(i => i.quantity),
                 label: '',
                 borderColor: 'rgba(255, 255, 255, 0)',
-                backgroundColor: chartData.map(i => i.color),
+                backgroundColor: chartData && chartData.map(i => i.color),
                 fill: true,
               },
             ],

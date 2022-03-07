@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import useSWR from "swr";
 import Link from 'next/link'
 import styles from '../../styles/drinks.module.css'
@@ -13,10 +13,7 @@ import { useThirsty } from "../../context/main-data";
 const fetcher = (url) => fetch(url).then((r) => r.json());
 
 export default function Example() {
-  // const [drinkQuery, setDrinkQuery] = useState('')
-  // const [drink, setDrink] = useState('')
-
-  const { drinkQuery, setDrinkQuery, drink, setDrink } = useThirsty()
+  const { drinkQuery, setDrinkQuery, drink, setDrink, setClickedResult } = useThirsty()
 
   // Do not fetch until drink value changes.
   const { data, error } = useSWR(
@@ -28,9 +25,14 @@ export default function Example() {
     setDrinkQuery(e.target.value);
   };
 
+  const clearDrinkQuery = () => {
+    setDrinkQuery('');
+  };
+
   useEffect(() => {
     const makeTheDrink = () => {
       setDrink(drinkQuery);
+      setClickedResult(data)
     }
 
     if (drink !== drinkQuery) makeTheDrink()
@@ -70,7 +72,9 @@ export default function Example() {
         }
         endAdornment={
           <InputAdornment position='start'>
-            <CancelIcon sx={{ color: "#8e8e93" }}/>
+            <CancelIcon 
+              onClick={clearDrinkQuery}
+              sx={{ color: "#8e8e93" }}/>
           </InputAdornment>
         }
       />
@@ -82,15 +86,15 @@ export default function Example() {
               return (
                 <div className={styles.gridItem} key={drink.strDrink}>
                   <img className={styles.thumbnail} src={drink.strDrinkThumb} alt='drink'/>
-                  <div className={styles.drinkname}><Link
-                    href={{
-                      pathname: `drinks/${drink.strDrink}`,
-                      query: drink
-                    }} 
-                    passHref
-                  >
-                    <span>{drink.strDrink}</span>
-                  </Link>
+                  <div className={styles.drinkname}>
+                    <Link
+                      href={{
+                        pathname: `drinks/${drink.strDrink}`
+                      }} 
+                      passHref
+                    >
+                      <span onClick={() => setClickedResult(drink)}>{drink.strDrink}</span>
+                    </Link>
                   </div>
                   <ArrowForwardIosIcon sx={{ color: "#b9b9b9" }} className={styles.arrow}/>
                 </div>
