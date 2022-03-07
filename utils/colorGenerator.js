@@ -18,10 +18,8 @@ const colorGenerator = (length) => {
     }
 
     const randNums = randomUnique(100,length*3)
-    console.log(randNums)
     for(let i = 0; i < length*3; i+=3) {
         colors.push(getColor(randNums[i], randNums[i+1], randNums[i+2]))
-        console.log('lops', randNums[i], randNums[i+1], randNums[i+2])
     }
 
     return colors

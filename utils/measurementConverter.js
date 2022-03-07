@@ -2,7 +2,6 @@ import parseIngredient from 'parse-ingredient';
 
 
 const measurementConverter = (recipe) => {
-    console.log('recipe: ', recipe)
     let chartData;
     let filtered = [];
     const tracker = {
@@ -13,7 +12,6 @@ const measurementConverter = (recipe) => {
     }
 
     function convertUnitToFO(item) {
-        // console.log('item: ', item)
         const { unitOfMeasure, quantity } = item
         unitOfMeasure = unitOfMeasure.toLowerCase()
         
@@ -46,7 +44,6 @@ const measurementConverter = (recipe) => {
         }
 
         const unit = conversionToOz[unitOfMeasure]
-        //console.log('unt: ', unit, 'quantity', quantity, unit * quantity)
         return quantity * unit
     }
 
@@ -67,6 +64,7 @@ const measurementConverter = (recipe) => {
         }
 
         if (parsedIng.unitOfMeasure && !parsedIng.description) {
+            if (parsedIng.unitOfMeasure === 'parts') parsedIng.unitOfMeasure = 'part'
             parsedIng = {
                 name,
                 unitOfMeasure: parsedIng.unitOfMeasure, 
@@ -76,6 +74,7 @@ const measurementConverter = (recipe) => {
         }
 
         if (!parsedIng.unitOfMeasure && parsedIng.description) {
+            if (parsedIng.description === 'parts') parsedIng.description = 'part'
             parsedIng = {
                 name,
                 unitOfMeasure: parsedIng.description, 
@@ -126,12 +125,12 @@ const measurementConverter = (recipe) => {
         return validUnits.includes(unit ? unit.toLowerCase() : unit)
     }
 
-    //console.log('hashtable: ', hashTable)
+    console.log('hashtable: ', hashTable, 'chartdata!!!!!!!!: ', parsedIngs)
     if (hashTable.areStringsSame) {
         chartData = parsedIngs.map(i => { 
             const chartInfo = {
-                quantity,
-                color
+                quantity: i.quantity,
+                color: i.color
             }
             return chartInfo
         })
@@ -151,7 +150,7 @@ const measurementConverter = (recipe) => {
             chartData = ings.map(i => {
                 const chartInfo = {
                     quantity: 1,
-                    color
+                    color: i.color
                 }
                 return chartInfo
             })
@@ -165,7 +164,6 @@ const measurementConverter = (recipe) => {
                 }
                 return chartInfo
             })
-            //console.log('filtered ingredient: ', convertedChartData)
             chartData = convertedChartData
         }
 
@@ -173,7 +171,7 @@ const measurementConverter = (recipe) => {
 
     console.log('chartdata: ', chartData);
     
-    return chartData || [1, 2, 3]
+    return chartData || null
 }
 
 export default measurementConverter

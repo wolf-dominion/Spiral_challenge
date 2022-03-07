@@ -1,7 +1,6 @@
 import colorGenerator from './colorGenerator'
 
 const getIngredients = (drinkInfo) => {
-    console.log('herllo')
     let results = [];
     const getAllKeys = Object.keys(drinkInfo);
     

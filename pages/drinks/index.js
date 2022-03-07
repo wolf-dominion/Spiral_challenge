@@ -8,11 +8,15 @@ import SearchIcon from '@mui/icons-material/Search'
 import CancelIcon from '@mui/icons-material/Cancel';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
+import { useThirsty } from "../../context/main-data";
+
 const fetcher = (url) => fetch(url).then((r) => r.json());
 
 export default function Example() {
-  const [drinkQuery, setdrinkQuery] = useState('')
-  const [drink, setDrink] = useState('')
+  // const [drinkQuery, setDrinkQuery] = useState('')
+  // const [drink, setDrink] = useState('')
+
+  const { drinkQuery, setDrinkQuery, drink, setDrink } = useThirsty()
 
   // Do not fetch until drink value changes.
   const { data, error } = useSWR(
@@ -21,7 +25,7 @@ export default function Example() {
   );
 
   const handleChange = (e) => {
-    setdrinkQuery(e.target.value);
+    setDrinkQuery(e.target.value);
   };
 
   useEffect(() => {

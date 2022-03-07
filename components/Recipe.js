@@ -10,7 +10,6 @@ const Recipe = (props) => {
     const { drinkInfo } = props
 
   const ingredients = getIngredients(drinkInfo)
-  console.log('ingredients: ', ingredients)
   const chartData = measurementConverter(ingredients)
 
     const displayIngredients = () => {
