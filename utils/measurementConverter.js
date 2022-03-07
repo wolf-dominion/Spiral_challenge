@@ -2,8 +2,9 @@ import parseIngredient from 'parse-ingredient';
 
 
 const measurementConverter = (recipe) => {
-    // console.log('recipe: ', recipe)
-
+    console.log('recipe: ', recipe)
+    let chartData;
+    let filtered = [];
     const tracker = {
         empty: 0,
         number: 0,
@@ -11,79 +12,143 @@ const measurementConverter = (recipe) => {
         strings: []
     }
 
+    function convertUnitToFO(item) {
+        console.log('item: ', item)
+
+        const conversionToOz = {
+            oz: 1,
+            ounce: 1,
+            ounces: 1,
+            jigger: 1.5,
+            jiggers: 1.5,
+            cup: 8.1,
+            cups: 8.1,
+            'cup/s': 8.1,
+            tablespoon: 0.5,
+            tablespoons: 0.5,
+            tbsp: 0.5,
+            tblsp: 0.5,
+            teaspoon: 0.2,
+            teaspoons: 0.2,
+            tsp: 0.2,
+            tumbler: 0.13,
+            tumblers: 0.13,
+            pony: 1,
+            ponies: 1,
+            cl: 3,
+            centiliter: 3, 
+            milliliter: 30,
+            shot: 1.5,
+            shots: 1.5
+        }
+
+        const unit = conversionToOz[item.unitOfMeasure]
+        console.log('unt: ', unit, 'quantity', item.quantity, unit * item.quantity)
+        return item.quantity * unit
+    }
+
     const parsedIngs = []
 
     recipe.forEach(ingredient => {
         const { name, measurement } = ingredient
-        const parsedIng = parseIngredient(measurement || 'none')
-        parsedIng[0]['name'] = name
-        parsedIngs.push(parsedIng[0])
+        const parsedIng = parseIngredient(measurement || 'none', { normalizeUOM: true })
+        parsedIng = parsedIng[0]
 
-        if (measurement === '') {
-            tracker.empty = tracker.empty + 1
+        if (!parsedIng.unitOfMeasure && !parsedIng.description) {
+            parsedIng = {
+                name,
+                unitOfMeasure: null, 
+                quantity: parsedIng.quantity
+            }
         }
-        // check if ingredients are simply numbers, nothing else in string
-        if (!isNaN(measurement) && !isNaN(parseFloat(measurement))) {
-            tracker.number = tracker.number + 1
+
+        if (parsedIng.unitOfMeasure && !parsedIng.description) {
+            parsedIng = {
+                name,
+                unitOfMeasure: parsedIng.unitOfMeasure, 
+                quantity: parsedIng.quantity
+            }
         }
-        else (
-            tracker.strings.push(parsedIng[0])
-        )
 
-    });
-    let chartData;
-    const prepareDataForChart = () => {
-        console.log('strings: ', tracker.strings)
-        const ings = tracker.strings
+        if (!parsedIng.unitOfMeasure && parsedIng.description) {
+            parsedIng = {
+                name,
+                unitOfMeasure: parsedIng.description, 
+                quantity: parsedIng.quantity
+            }
+        }
 
-        const hashTable = {
-            string: '',
-            areStringsSame: true
+        if (parsedIng.unitOfMeasure && parsedIng.description) {
+            parsedIng = {
+                name,
+                unitOfMeasure: parsedIng.unitOfMeasure, 
+                quantity: parsedIng.quantity
+            }
         }
         
-        ings.forEach(i => {
+        parsedIngs.push(parsedIng)
+    });
 
-            if (i.unitOfMeasure) {
-                if (hashTable.string && i.unitOfMeasure !== hashTable.string) {
+    console.log('parsed ins: ', parsedIngs)
+
+    const hashTable = {
+        string: '',
+        areStringsSame: true,
+        allQuantitiesNull: false
+    }
+
+    parsedIngs.forEach(ing => {
+            if (ing.unitOfMeasure) {
+                if (hashTable.string && ing.unitOfMeasure !== hashTable.string) {
                     hashTable.areStringsSame = false
                     return
                 }
-                else hashTable.string = i.unitOfMeasure
+                else hashTable.string = ing.unitOfMeasure
             }
 
-            if (!i.unitOfMeasure && i.description) {
+            if (!ing.unitOfMeasure && hashTable.string) hashTable.areStringsSame = false
 
+            if (!ing.quantity) {
+                hashTable.allQuantitiesNull = true
             }
 
-            if (i.quantity && !i.quantity2) {
+    })
 
-            }
+    function doesItHaveValidUnit(unit) {
+        const validUnits = ['cup', 'oz', 'tbsp', 'tsp', 'teaspoon', 'ml', 'shots', 'shot', 'jigger', 'jiggers']
+        return validUnits.includes(unit)
+    }
 
-            if (i.quantity && i.quantity2) {
-
-            }
-
+    console.log('hashtable: ', hashTable)
+    if (hashTable.areStringsSame) {
+        chartData = parsedIngs.map(i => i.quantity)
+    } else {
+        filtered = parsedIngs.filter(i => {
+            return i.unitOfMeasure !== 'none' && doesItHaveValidUnit(i.unitOfMeasure)
         })
 
-        if (hashTable.areStringsSame) {
-            chartData = tracker.strings.map(i => i.quantity)
+        console.log('filtered: ', filtered)
+
+        if (filtered.length === 0 && hashTable.allQuantitiesNull) {
+            const ings = parsedIngs.filter(i => {
+                if (i.unitOfMeasure === 'none') {
+                    return i
+                }
+            })
+            chartData = ings.map(i => 1)
         }
-    }
-    
-    if (tracker.empty === recipe.length) {
-        console.log('All ingredients can be divided evenly, 1 / recipe.length')
+
+        if (!hashTable.areStringsSame && !hashTable.allQuantitiesNull && filtered.length >= 2) {
+            const convertedChartData = filtered.map(i => convertUnitToFO(i))
+            console.log('filtered ingredient: ', convertedChartData)
+            chartData = convertedChartData
+        }
+
     }
 
-    if (tracker.number === recipe.length) {
-        console.log('All measuremets can be sent into chart')
-    }
-
-    else if (tracker.strings) {
-        prepareDataForChart()
-    }
+    console.log('chartdata: ', chartData);
     
-    console.log('final chart data: ',chartData)
-    return chartData
+    return chartData || [1, 2, 3]
 }
 
 export default measurementConverter

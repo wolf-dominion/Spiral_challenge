@@ -13,7 +13,7 @@ const Recipe = (props) => {
 
   const ingredients = getIngredients(drinkInfo)
   const chartData = measurementConverter(ingredients)
-  console.log('chart-data:' , chartData)
+  // console.log('chart-data:' , chartData)
 
     const displayIngredients = () => {
       const list = ingredients.map(ingredient => {
