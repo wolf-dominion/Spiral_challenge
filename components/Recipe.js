@@ -53,10 +53,10 @@ const Recipe = (props) => {
             labels: false,
             datasets: [
               {
-                data: chartData,
+                data: chartData.map(i => i.quantity),
                 label: '',
                 borderColor: 'rgba(255, 255, 255, 0)',
-                backgroundColor: 'rgba(255, 255, 255, 0)',
+                backgroundColor: chartData.map(i => i.color),
                 fill: true,
               },
             ],

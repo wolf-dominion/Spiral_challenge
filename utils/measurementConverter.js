@@ -128,7 +128,13 @@ const measurementConverter = (recipe) => {
 
     //console.log('hashtable: ', hashTable)
     if (hashTable.areStringsSame) {
-        chartData = parsedIngs.map(i => i.quantity)
+        chartData = parsedIngs.map(i => { 
+            const chartInfo = {
+                quantity,
+                color
+            }
+            return chartInfo
+        })
     } else {
         filtered = parsedIngs.filter(i => {
             return i.unitOfMeasure !== 'none' && doesItHaveValidUnit(i.unitOfMeasure)
@@ -142,18 +148,30 @@ const measurementConverter = (recipe) => {
                     return i
                 }
             })
-            chartData = ings.map(i => 1)
+            chartData = ings.map(i => {
+                const chartInfo = {
+                    quantity: 1,
+                    color
+                }
+                return chartInfo
+            })
         }
 
         if (!hashTable.areStringsSame && !hashTable.allQuantitiesNull && filtered.length >= 1) {
-            const convertedChartData = filtered.map(i => convertUnitToFO(i))
+            const convertedChartData = filtered.map(i => {
+                const chartInfo = {
+                    quantity: convertUnitToFO(i),
+                    color: i.color
+                }
+                return chartInfo
+            })
             //console.log('filtered ingredient: ', convertedChartData)
             chartData = convertedChartData
         }
 
     }
 
-    //console.log('chartdata: ', chartData);
+    console.log('chartdata: ', chartData);
     
     return chartData || [1, 2, 3]
 }
