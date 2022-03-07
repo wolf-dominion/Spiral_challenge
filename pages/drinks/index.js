@@ -26,7 +26,6 @@ export default function Example() {
 
   useEffect(() => {
     const makeTheDrink = () => {
-      // console.log('drink', drink, 'drinkquery', drinkQuery)
       setDrink(drinkQuery);
     }
 
@@ -44,7 +43,7 @@ export default function Example() {
 
       return emptyRows.map(row => {
         return (
-          <div className={styles.gridItem} key={row.indexOf+'empty-row'}>
+          <div className={styles.gridItem} key={emptyRows.indexOf(row)+'empty-row'}>
           </div>
         )
     })
@@ -54,9 +53,6 @@ export default function Example() {
   return (
     <div className={styles.gridContainer}>
       <div className={styles.title}>Thirsty</div>
-      {/* <input type='search' className={styles.searchbar} onChange={handleChange} value={drinkQuery} placeholder='Find a drink'/> */}
-      
-      
       <Input
         disableUnderline={true}
         className={styles.searchbar} 
@@ -76,8 +72,6 @@ export default function Example() {
       />
       <span className={styles.divider}></span>
       { error && <div>failed to load</div> }
-      {/* {!data && <div>loading...</div> } */}
-      {/* { data && <pre>{JSON.stringify(data, null, 2)}</pre>} */}
       <div className="resultsGrid">
         { data && data.drinks && 
             data.drinks.map(drink => {

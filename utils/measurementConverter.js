@@ -13,8 +13,10 @@ const measurementConverter = (recipe) => {
     }
 
     function convertUnitToFO(item) {
-        console.log('item: ', item)
-
+        // console.log('item: ', item)
+        const { unitOfMeasure, quantity } = item
+        unitOfMeasure = unitOfMeasure.toLowerCase()
+        
         const conversionToOz = {
             oz: 1,
             ounce: 1,
@@ -38,19 +40,20 @@ const measurementConverter = (recipe) => {
             cl: 3,
             centiliter: 3, 
             milliliter: 30,
+            ml: 30,
             shot: 1.5,
             shots: 1.5
         }
 
-        const unit = conversionToOz[item.unitOfMeasure]
-        console.log('unt: ', unit, 'quantity', item.quantity, unit * item.quantity)
-        return item.quantity * unit
+        const unit = conversionToOz[unitOfMeasure]
+        //console.log('unt: ', unit, 'quantity', quantity, unit * quantity)
+        return quantity * unit
     }
 
     const parsedIngs = []
 
     recipe.forEach(ingredient => {
-        const { name, measurement } = ingredient
+        const { name, measurement, color } = ingredient
         const parsedIng = parseIngredient(measurement || 'none', { normalizeUOM: true })
         parsedIng = parsedIng[0]
 
@@ -58,7 +61,8 @@ const measurementConverter = (recipe) => {
             parsedIng = {
                 name,
                 unitOfMeasure: null, 
-                quantity: parsedIng.quantity
+                quantity: parsedIng.quantity,
+                color
             }
         }
 
@@ -66,7 +70,8 @@ const measurementConverter = (recipe) => {
             parsedIng = {
                 name,
                 unitOfMeasure: parsedIng.unitOfMeasure, 
-                quantity: parsedIng.quantity
+                quantity: parsedIng.quantity,
+                color
             }
         }
 
@@ -74,7 +79,8 @@ const measurementConverter = (recipe) => {
             parsedIng = {
                 name,
                 unitOfMeasure: parsedIng.description, 
-                quantity: parsedIng.quantity
+                quantity: parsedIng.quantity,
+                color
             }
         }
 
@@ -82,7 +88,8 @@ const measurementConverter = (recipe) => {
             parsedIng = {
                 name,
                 unitOfMeasure: parsedIng.unitOfMeasure, 
-                quantity: parsedIng.quantity
+                quantity: parsedIng.quantity,
+                color
             }
         }
         
@@ -115,11 +122,11 @@ const measurementConverter = (recipe) => {
     })
 
     function doesItHaveValidUnit(unit) {
-        const validUnits = ['cup', 'oz', 'tbsp', 'tsp', 'teaspoon', 'ml', 'shots', 'shot', 'jigger', 'jiggers']
-        return validUnits.includes(unit)
+        const validUnits = ['cup', 'oz', 'tbsp', 'tsp', 'teaspoon', 'ml', 'shots', 'shot', 'jigger', 'jiggers', 'ounce', 'cl']
+        return validUnits.includes(unit ? unit.toLowerCase() : unit)
     }
 
-    console.log('hashtable: ', hashTable)
+    //console.log('hashtable: ', hashTable)
     if (hashTable.areStringsSame) {
         chartData = parsedIngs.map(i => i.quantity)
     } else {
@@ -127,7 +134,7 @@ const measurementConverter = (recipe) => {
             return i.unitOfMeasure !== 'none' && doesItHaveValidUnit(i.unitOfMeasure)
         })
 
-        console.log('filtered: ', filtered)
+        //console.log('filtered: ', filtered)
 
         if (filtered.length === 0 && hashTable.allQuantitiesNull) {
             const ings = parsedIngs.filter(i => {
@@ -138,15 +145,15 @@ const measurementConverter = (recipe) => {
             chartData = ings.map(i => 1)
         }
 
-        if (!hashTable.areStringsSame && !hashTable.allQuantitiesNull && filtered.length >= 2) {
+        if (!hashTable.areStringsSame && !hashTable.allQuantitiesNull && filtered.length >= 1) {
             const convertedChartData = filtered.map(i => convertUnitToFO(i))
-            console.log('filtered ingredient: ', convertedChartData)
+            //console.log('filtered ingredient: ', convertedChartData)
             chartData = convertedChartData
         }
 
     }
 
-    console.log('chartdata: ', chartData);
+    //console.log('chartdata: ', chartData);
     
     return chartData || [1, 2, 3]
 }
