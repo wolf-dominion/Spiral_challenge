@@ -9,13 +9,11 @@ import { useEffect, useState } from "react";
 function DrinkRecipe() {
 
     const router = useRouter()
-
     const drinkInfo = router.query
-console.log('DINRK INFO: ', drinkInfo)
-    const { clickedResult, setClickedResult } = useThirsty()
-    console.log('search results!!!!XXXXXXXXX: ', clickedResult)
 
-  const [fetchedData, setFetchedData] = useState(null)
+    const { clickedResult, setClickedResult } = useThirsty()
+
+    const [fetchedData, setFetchedData] = useState(null)
 
     useEffect(() => {
       const fetchData = async () => {
@@ -26,10 +24,6 @@ console.log('DINRK INFO: ', drinkInfo)
       };
     
       if (clickedResult.length === 0) {
-        // console.log('fetch')
-        // fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${drinkInfo.drinkId}`)
-        //   .then(res => res.json())
-        //   .then(data => setClickedResult(data))
         fetchData();
         console.log('after fetch')
       }
